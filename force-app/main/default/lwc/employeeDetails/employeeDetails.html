@@ -1,0 +1,51 @@
+<template>
+    <lightning-card>
+        <template if:true={spinnerOn}>
+            <div class="exampleHolder">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+<!-- Button to display New Employee Modal -->
+        <lightning-button variant="brand" label="New Employee" title="New Employee" onclick={showModalBox}>
+</lightning-button>        
+<!-- Input for Search keyword  -->
+        <lightning-input placeholder = "Enter Employee Name" onkeyup={filterEmployeeRecords}></lightning-input>
+<!-- Datatable to show employee records -->
+        <lightning-datatable 
+            key-field="id" 
+            data={empList} 
+            columns={columns}
+            hide-checkbox-column>
+        </lightning-datatable>
+
+<!-- Modal for New Employee Form -->
+        <template if:true={isShowModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">                
+                <div class="slds-modal__container">
+                    <header class = "slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                            <lightning-icon icon-name="utility:close" alternative-text="Close" variant="inverse" size="small"></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Employee Details</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning-record-form
+                        object-api-name={employeeObject}
+                        layout-type = "Full">
+                        </lightning-record-form>
+                    </div>
+                    <footer class = "slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+<!-- PopOver on Hover for Employee -->
+        <div style="display: none; position:absolute; opacity:0" class="ModalToolTip">
+            <c-employee-compact-layout-on-hover record-id="a005g000035ZLbxAAG"></c-employee-compact-layout-on-hover>
+        </div>
+    </lightning-card>
+</template>
