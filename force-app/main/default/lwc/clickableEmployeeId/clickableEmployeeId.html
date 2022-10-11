@@ -1,0 +1,21 @@
+<template>
+    <div class="slds-box slds-box_xx-small slds-theme_shade" onmouseover={handleMouseOver} onmouseout={handleMouseOut}>
+<!-- PopOver on Hover for Employee -->
+        <div style="display:none;position: absolute;opacity:0" class="ModelTooltip">
+            <c-employee-compact-layout-on-hover topmargin={topmargin} leftmargin={leftmargin} record-id={objRecordId}></c-employee-compact-layout-on-hover>
+        </div>
+        <lightning-button value={recordId} label={empId} variant="base"  onclick={handleOnClick}></lightning-button>
+
+<!--         <template if:true={showDiv}>
+            <div class="popup">
+                Data in hover box
+            </div>
+        </template>
+ -->    </div>
+
+<!--     <div style="display: none; position:absolute; opacity:0" class="ModalToolTip">
+        <h2>It is shownn</h2>
+        <c-employee-compact-layout-on-hover record-id="a005g000035ZLbxAAG"></c-employee-compact-layout-on-hover>
+    </div>
+ -->
+</template>

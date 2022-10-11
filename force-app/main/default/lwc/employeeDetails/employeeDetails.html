@@ -11,13 +11,25 @@
 <!-- Input for Search keyword  -->
         <lightning-input placeholder = "Enter Employee Name" onkeyup={filterEmployeeRecords}></lightning-input>
 <!-- Datatable to show employee records -->
-        <lightning-datatable 
+        <!-- <lightning-datatable 
             key-field="id" 
             data={empList} 
             columns={columns}
             hide-checkbox-column>
-        </lightning-datatable>
-
+        </lightning-datatable> -->
+        <c-custom-data-table
+            key-field="id"
+            data={empList}
+            columns={columns}
+            column-widths-mode="auto">
+        </c-custom-data-table>
+        <br/>
+        <template if:true={isPaginate}>
+            <lightning-button-group>
+                <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
+                <lightning-button label="Next" onclick={handleNext} disabled="false"></lightning-button>
+            </lightning-button-group>
+        </template>
 <!-- Modal for New Employee Form -->
         <template if:true={isShowModal}>
             <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">                
@@ -43,9 +55,5 @@
             <div class="slds-backdrop slds-backdrop_open"></div>
         </template>
 
-<!-- PopOver on Hover for Employee -->
-        <div style="display: none; position:absolute; opacity:0" class="ModalToolTip">
-            <c-employee-compact-layout-on-hover record-id="a005g000035ZLbxAAG"></c-employee-compact-layout-on-hover>
-        </div>
     </lightning-card>
 </template>

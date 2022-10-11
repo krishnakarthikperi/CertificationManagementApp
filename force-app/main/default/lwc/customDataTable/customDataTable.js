@@ -1,3 +1,12 @@
-import { LightningElement } from 'lwc';
+import LightningDatatable from 'lightning/datatable';
+import clickableEmployeeIdTemplate from './clickableEmployeeIdTemplate.html';
 
-export default class CustomDataTable extends LightningElement {}
+export default class CustomDataTable extends LightningDatatable {
+    static customTypes={
+        clickableEmployeeId:{
+            template:clickableEmployeeIdTemplate,
+            standardCellLayout:true,
+            typeAttributes:['recordId']
+        }
+    };
+}

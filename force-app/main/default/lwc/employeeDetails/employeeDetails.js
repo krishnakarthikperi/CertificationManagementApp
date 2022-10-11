@@ -5,14 +5,17 @@ import EMPLOYEE_OBJECT from '@salesforce/schema/Employee__c';
 
 
 const cols =[
-    {label:'Employee ID',fieldName:'Name',type:'text',initialWidth:80,cellAttributes: { alignment: 'left' }},
+    // {label:'Employee ID',fieldName:'Name',type:'text',initialWidth:80,cellAttributes: { alignment: 'left' }},
     // {label:'Name',fieldName:'Employee_Name__c',type:'text',initialWidth:200,cellAttributes: { alignment: 'left' }},
-    {label:'Name',fieldName:'EmployeeUrl',type:'url',initialWidth:200,cellAttributes: { alignment: 'left' }, typeAttributes :{label:{fieldName:'Employee_Name__c'}}},
-    {label:'Email',fieldName:'Email__c',type:'email',initialWidth:300,cellAttributes: { alignment: 'left' }},
+    {label:'Employee ID',fieldName:'Name',type:'clickableEmployeeId',cellAttributes: { alignment: 'left'},typeAttributes:{recordId:{fieldName:'Id'}}},
+    {label:'Name',fieldName:'EmployeeUrl',type:'url',cellAttributes: { alignment: 'left' }, typeAttributes :{label:{fieldName:'Employee_Name__c'}}},
+    {label:'Email',fieldName:'Email__c',type:'email',cellAttributes: { alignment: 'left' }},
     {label:'Experience',fieldName:'Experience__c',type:'number',fixedWidth:100,cellAttributes: { alignment: 'left' }}
 ];
+const pageSize = 10;
 export default class EmployeeDetails extends LightningElement {
     empList;
+    fullEmpList;
     spinnerOn = false;
     columns=cols;
     searchKey = '';
@@ -20,14 +23,15 @@ export default class EmployeeDetails extends LightningElement {
 // Call the getTheEmployeeList() when the page is loaded for the first time.
     connectedCallback(){
         this.getTheEmployeeList();
-                     const toastEvent = new ShowToastEvent({
-                        title:'Loaded Employee Details',
-                        variant:'Success',
-                        mode:'dismissible'
-                    });
-                    this.dispatchEvent(toastEvent);
+        //Success toast message
+        const toastEvent = new ShowToastEvent({
+            title:'Loaded Employee Details',
+            variant:'Success',
+            mode:'dismissible'
+        });
+        this.dispatchEvent(toastEvent);
     }
-
+    
     getTheEmployeeList(){
         this.spinnerOn=true;
         getEmployeeList({empName: this.searchKey})
@@ -38,19 +42,12 @@ export default class EmployeeDetails extends LightningElement {
                 tempData.EmployeeUrl = '/'+dataItem.Id;
                 result.push(tempData);
             });
-            this.empList = result;
+            this.fullEmpList = result;
+            this.empList = this.fullEmpList.slice(this.startSize,this.endSize);
+            this.isPaginate = this.fullEmpList.length >this.pageSize;
 //Turn off spinner loading
             this.spinnerOn=false;
-
-//Success toast message
-/*             const toastEvent = new ShowToastEvent({
-                title:'Success',
-                message:'Employee records successfully fetched',
-                variant:'Success',
-                mode:'dismissible'
-            });
-            this.dispatchEvent(toastEvent);
- */        })
+        })
         .catch(error=>{
             console.log(error);
             this.spinnerOn=false;
@@ -75,31 +72,27 @@ export default class EmployeeDetails extends LightningElement {
 
 //New Employee Modal
     @track isShowModal = false;
-
     showModalBox() {  
         this.isShowModal = true;
     }
-
     hideModalBox() {  
         this.isShowModal = false;
     }
 
-//PopOver for Employee Details
-    @track objRecordId;
-    handleMouseOver(event){
-        const toolTipDiv = this.template.querySelector('div.ModelTooltip');
-        toolTipDiv.style.opacity = 1;
-        toolTipDiv.style.display = "block";
-        // eslint-disable-next-line
-        window.clearTimeout(this.delayTimeout);
-        this.delayTimeout = setTimeout(() => {
-            this.objRecordId = "a005g000035ZLbxAAG";
-        }, 50);
+//Pagination
+    startSize = 0;
+    endSize = pageSize;
+    isPaginate = false;
+    handlePrevious(){
+        this.startSize = this.startSize - pageSize;
+        this.endSize = this.endSize - pageSize;
+        this.empList = this.fullEmpList.slice(this.startSize,this.endSize); 
+        if(this.endSize>=this.fullEmpList.length) this.template.querySelector('lightning-button')[2].disabled = true;
     }
-
-    handleMouseOut(){
-        const toolTipDiv = this.template.querySelector('div.ModelTooltip');
-        toolTipDiv.style.opacity = 0;
-        toolTipDiv.style.display = "none";
+    handleNext(){
+        this.startSize = this.startSize + pageSize;
+        this.endSize = this.endSize + pageSize;
+        if(this.startSize!=0) this.template.querySelectorAll('lightning-button')[1].disabled = false;
+        this.empList = this.fullEmpList.slice(this.startSize,this.endSize); 
     }
 }
