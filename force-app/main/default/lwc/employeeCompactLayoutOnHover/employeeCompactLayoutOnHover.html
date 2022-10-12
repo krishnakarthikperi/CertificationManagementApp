@@ -1,24 +1,189 @@
 <template>
   <div>
     <template if:true={recordId}>
-        <div style="position:absolute; opacity:1" class="ModelToolTip">
-            <section class="slds-popover slds-popover_panel slds-nubbin_top_left" role="dialog">
-                <div class="slds-popover__header">
-                    <header class="slds-media slds-media_center slds-m-bottom_large">
-                        <div class="slds-media__body">
-                            <h2 class="slds-text-heading_medium slds-hyphenate">Employee Details</h2>
+        <section aria-labelledby="panel-heading-id" class="slds-popover slds-popover_panel slds-nubbin_left-top" role="dialog">
+            <button class="slds-button slds-button_icon slds-button_icon slds-button_icon-small slds-float_right slds-popover__close" title="Close dialog">
+                <svg class="slds-button__icon" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                </svg>
+                <span class="slds-assistive-text">Close dialog</span>
+            </button>
+            <div class="slds-popover__header">
+                <header class="slds-media slds-media_center slds-m-bottom_small">
+                    <span class="slds-icon_container slds-icon-standard-account slds-media__figure">
+                        <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                            <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#avatar"></use>
+                        </svg>
+                    </span>
+                    <div class="slds-media__body">
+                        <h2 class="slds-text-heading_medium slds-hyphenate" id="panel-heading-id">
+                            <a href="#">{empObj.Employee_Name__c}</a>
+                        </h2>
+                    </div>
+                </header>
+                <footer class="slds-grid slds-wrap slds-grid_pull-padded">
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Employee Id">Employee Id</p>
+                            </dt>
+                            <dd>
+                                <p class="slds-truncate" title={empObj.Name}>{empObj.Name}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Primary Skill">Primary Skill</p>
+                            </dt>
+                            <dd>
+                                <p class="slds-truncate" title={empObj.Primary_Skill__c}>{empObj.Primary_Skill__c}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Email">Email</p>
+                            </dt>
+                            <dd>
+                                <a href="#">{empObj.Email__c}</a>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Secondary Skill">Secondary Skill</p>
+                            </dt>
+                            <dd>
+                                <p class="slds-truncate" title={empObj.Secondary_Skill__c}>{empObj.Secondary_Skill__c}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Experience">Experience</p>
+                            </dt>
+                            <dd>
+                                <a href="#">{empObj.Experience__c}</a>
+                            </dd>
+                        </dl>
+                    </div>
+                </footer>
+            </div>
+            <div class="slds-popover__body">
+                <dl class="slds-popover__body-list">
+                    <dt class="slds-m-bottom_small">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container slds-icon-standard-opportunity">
+                                    <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                                        <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#opportunity"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">Certification Requests</span>
+                                </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-heading_small slds-hyphenate">Certification Requests</p>
+                            </div>
                         </div>
-                    </header>
-                </div>
-                <div class="slds-popover__body">
-                    <lightning-record-form record-id={recordId} object-api-name="Employee__c" layout-type="Full" columns="2" mode="readOnly"></lightning-record-form>
-                </div>
-            </section>
-        </div>
+                    </dt>
+                    <template if:false={empObj.Certification_Requests__r}>
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Certification">No Certification Requests Found</dt>
+                    </template>
+                    <template if:true={empObj.Certification_Requests__r}>
+                        <template for:each={empObj.Certification_Requests__r} for:item="CerReq">
+                            <dd class="slds-m-top_x-small" key={CerReq.Id}>
+                                <p class="slds-truncate" title={CerReq.Name}>
+                                    <a href="#">{CerReq.Name}</a>
+                                </p>
+                                <dl class="slds-list_horizontal slds-wrap slds-text-body_small">
+                                    <dt class="slds-item_label slds-text-color_default slds-truncate" title="Certification">Certification</dt>
+                                    <dd class="slds-item_detail slds-text-color_weak slds-truncate" title={CerReq.Certification__r.Name}>{CerReq.Certification__r.Name}</dd>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Status">Status</dt>
+                                    <dd class="slds-item_detail slds-text-color_weak slds-truncate" title={CerReq.Status__c}>{CerReq.Status__c}</dd>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Due Date">Due Date</dt>
+                                    <dd class="slds-item_detail slds-text-color_weak slds-truncate" title={CerReq.Due_Date__c}>{CerReq.Due_Date__c}</dd>
+                                </dl>
+                            </dd>
+                        </template>
+                    </template>
+                </dl>
+                <!-- <dl class="slds-popover__body-list">
+                    <dt class="slds-m-bottom_small">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container slds-icon-standard-case">
+                                    <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                                        <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#case"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">Cases</span>
+                                </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-heading_small slds-hyphenate">Cases (1)</p>
+                            </div>
+                        </div>
+                    </dt>
+                    <dd class="slds-m-top_x-small">
+                        <p class="slds-truncate" title="Tesla - Anypoint Studios">
+                            <a href="#">Tesla - Anypoint Studios</a>
+                        </p>
+                        <dl class="slds-list_horizontal slds-wrap slds-text-body_small">
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Value">Value</dt>
+                            <dd class="slds-item_detail slds-text-color_weak slds-truncate" title="$60,000">$60,000</dd>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Close Date">Close Date</dt>
+                            <dd class="slds-item_detail slds-text-color_weak slds-truncate" title="Jan 15, 2016">Jan 15, 2016</dd>
+                        </dl>
+                    </dd>
+                    <dd class="slds-m-top_x-small slds-text-align_right">
+                        <a href="#" title="View all Opportunities">View All</a>
+                    </dd>
+                </dl> -->
+            </div>
+        </section>
+
     </template>
   </div>  
 </template>
 
+
+
+<!-- INTITAL VERSION (1.0) OF POPOVER -->
+
+<!-- <div style="position:absolute; opacity:1" class="ModelToolTip">
+    <section class="slds-popover slds-popover_panel slds-nubbin_top_left" role="dialog">
+        <div class="slds-popover__header">
+            <header class="slds-media slds-media_center slds-m-bottom_large">
+                <div class="slds-media__body">
+                    <h2 class="slds-text-heading_medium slds-hyphenate">Employee Details</h2>
+                </div>
+            </header>
+        </div>
+        <div class="slds-popover__body">
+            
+            <div>
+                EId: {empObj.Name}<br/>
+                E name: {empObj.Employee_Name__c}<br/>
+                Email: {empObj.Email__c}<br/>
+                Xp: {empObj.Experience__c}<br/>
+                <template for:each={empObj.Certification_Requests__r} for:item="CerReq">
+                    <p key={CerReq.Id}>Cer name: {CerReq.Name}</p>
+                </template>
+            </div>
+            <lightning-record-form record-id={recordId} object-api-name="Employee__c" layout-type="Full" columns="2" mode="readOnly"></lightning-record-form>
+        </div>
+    </section>
+</div> -->
+
+
+
+
+
+<!-- BACKUP COPY OF IMPROVED POPOVER -->
 
 <!-- <section aria-labelledby="panel-heading-id" class="slds-popover slds-popover_panel slds-nubbin_left-top" role="dialog">
     <button class="slds-button slds-button_icon slds-button_icon slds-button_icon-small slds-float_right slds-popover__close" title="Close dialog">

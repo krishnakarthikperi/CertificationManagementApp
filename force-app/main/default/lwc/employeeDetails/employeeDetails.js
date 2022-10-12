@@ -2,12 +2,12 @@ import { LightningElement, track } from 'lwc';
 import getEmployeeList from '@salesforce/apex/EmployeeLWCCtrl.getEmployeeList';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import EMPLOYEE_OBJECT from '@salesforce/schema/Employee__c';
-
+import getEmployeeRelatedList from '@salesforce/apex/EmployeeLWCCtrl.getEmployeeRelatedList'
 
 const cols =[
     // {label:'Employee ID',fieldName:'Name',type:'text',initialWidth:80,cellAttributes: { alignment: 'left' }},
     // {label:'Name',fieldName:'Employee_Name__c',type:'text',initialWidth:200,cellAttributes: { alignment: 'left' }},
-    {label:'Employee ID',fieldName:'Name',type:'clickableEmployeeId',cellAttributes: { alignment: 'left'},typeAttributes:{recordId:{fieldName:'Id'}}},
+    {label:'Employee ID',fieldName:'Name',type:'clickableEmployeeId',cellAttributes: { alignment: 'left'},typeAttributes:{recordId:{fieldName:'Id'},recordObject:{fieldName:'empObject'}}},
     {label:'Name',fieldName:'EmployeeUrl',type:'url',cellAttributes: { alignment: 'left' }, typeAttributes :{label:{fieldName:'Employee_Name__c'}}},
     {label:'Email',fieldName:'Email__c',type:'email',cellAttributes: { alignment: 'left' }},
     {label:'Experience',fieldName:'Experience__c',type:'number',fixedWidth:100,cellAttributes: { alignment: 'left' }}
@@ -19,6 +19,7 @@ export default class EmployeeDetails extends LightningElement {
     spinnerOn = false;
     columns=cols;
     searchKey = '';
+    //empMap;
     
 // Call the getTheEmployeeList() when the page is loaded for the first time.
     connectedCallback(){
@@ -30,6 +31,16 @@ export default class EmployeeDetails extends LightningElement {
             mode:'dismissible'
         });
         this.dispatchEvent(toastEvent);
+
+// Employee Details Map
+        getEmployeeRelatedList()
+        .then(data=>{
+            console.log(data);
+//            empMap=data;
+        })
+        .catch(error=>{
+            console.log(error);
+        })
     }
     
     getTheEmployeeList(){
@@ -40,6 +51,7 @@ export default class EmployeeDetails extends LightningElement {
             data.forEach(dataItem=>{
                 let tempData = Object.create(dataItem);
                 tempData.EmployeeUrl = '/'+dataItem.Id;
+                tempData.empObject = dataItem;
                 result.push(tempData);
             });
             this.fullEmpList = result;

@@ -5,6 +5,8 @@ export default class ClickableEmployeeId extends LightningElement {
     @api empId;
     @api recordId;
     @track objRecordId;
+    @api empObject;
+
     topmargin;
     leftmargin;
     showDiv;
@@ -22,6 +24,8 @@ export default class ClickableEmployeeId extends LightningElement {
         this.delayTimeout = setTimeout(() => {
             this.objRecordId = this.recordId;
         }, 50);
+    
+        console.log(this.empMap);
     }
 
     handleMouseOut(){

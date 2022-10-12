@@ -2,7 +2,7 @@
     <div class="slds-box slds-box_xx-small slds-theme_shade" onmouseover={handleMouseOver} onmouseout={handleMouseOut}>
 <!-- PopOver on Hover for Employee -->
         <div style="display:none;position: absolute;opacity:0" class="ModelTooltip">
-            <c-employee-compact-layout-on-hover topmargin={topmargin} leftmargin={leftmargin} record-id={objRecordId}></c-employee-compact-layout-on-hover>
+            <c-employee-compact-layout-on-hover topmargin={topmargin} leftmargin={leftmargin} record-id={objRecordId} emp-obj={empObject}></c-employee-compact-layout-on-hover>
         </div>
         <lightning-button value={recordId} label={empId} variant="base"  onclick={handleOnClick}></lightning-button>
 

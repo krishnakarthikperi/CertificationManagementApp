@@ -6,7 +6,7 @@ export default class CustomDataTable extends LightningDatatable {
         clickableEmployeeId:{
             template:clickableEmployeeIdTemplate,
             standardCellLayout:true,
-            typeAttributes:['recordId']
+            typeAttributes:['recordId','recordObject']
         }
     };
 }
