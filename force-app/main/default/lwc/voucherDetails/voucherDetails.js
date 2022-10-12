@@ -1,57 +1,35 @@
-import { LightningElement, track } from 'lwc';
-import getEmployeeList from '@salesforce/apex/EmployeeLWCCtrl.getEmployeeList';
+import { LightningElement,track } from 'lwc';
+import getVoucherList from '@salesforce/apex/VoucherLWCCtrl.getVoucherList';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import EMPLOYEE_OBJECT from '@salesforce/schema/Employee__c';
-import getEmployeeRelatedList from '@salesforce/apex/EmployeeLWCCtrl.getEmployeeRelatedList'
 import { NavigationMixin } from 'lightning/navigation';
+import VOUCHER_OBJECT from '@salesforce/schema/Voucher__c';
 
-const cols =[
-    // {label:'Employee ID',fieldName:'Name',type:'text',initialWidth:80,cellAttributes: { alignment: 'left' }},
-    // {label:'Name',fieldName:'Employee_Name__c',type:'text',initialWidth:200,cellAttributes: { alignment: 'left' }},
-    {label:'Employee ID',fieldName:'Name',type:'clickableEmployeeId',cellAttributes: { alignment: 'left'},typeAttributes:{recordId:{fieldName:'Id'},recordObject:{fieldName:'empObject'}}},
-    {label:'Name',fieldName:'EmployeeUrl',type:'url',cellAttributes: { alignment: 'left' }, typeAttributes :{label:{fieldName:'Employee_Name__c'}}},
-    {label:'Email',fieldName:'Email__c',type:'email',cellAttributes: { alignment: 'left' }},
-    {label:'Experience',fieldName:'Experience__c',type:'number',fixedWidth:100,cellAttributes: { alignment: 'left' }}
+const cols=[
+    {label:'Voucher ID',fieldName:'voucherUrl',type:'url',typeAttributes :{label:{fieldName:'Name'}}},
+    {label:'Certification',fieldName:'certificationUrl',type:'url',typeAttributes :{label:{fieldName:'certificationName'}}},
+    // {label:'Voucher Cost',fieldName:'Voucher_Cost__c'},
+    // {label:'Validity',fieldName:'Validity__c'},
+    // {label:'Comments',fieldName:'Comments__c'},
+    {label:'Active',fieldName:'Active__c'}
 ];
 const pageSize = 10;
-export default class EmployeeDetails extends NavigationMixin(LightningElement) {
-    empList;
-    fullEmpList;
+export default class VoucherDetails extends NavigationMixin(LightningElement) {
+    vouList;
+    fullVouList;
     spinnerOn = false;
     columns=cols;
-    searchKey = '';
-    //empMap;
-    
-// Call the getTheEmployeeList() when the page is loaded for the first time.
-    connectedCallback(){
-        this.getTheEmployeeList();
-        //Success toast message
-        const toastEvent = new ShowToastEvent({
-            title:'Loaded Employee Details',
-            variant:'Success',
-            mode:'dismissible'
-        });
-        this.dispatchEvent(toastEvent);
+    searchKey='';
 
-// Employee Details Map
-        getEmployeeRelatedList()
-        .then(data=>{
-            console.log(data);
-//            empMap=data;
-        })
-        .catch(error=>{
-            console.log(error);
-        })
-    }
-    
-    getTheEmployeeList(){
+// Get the Vouchers List using APEX Class
+    getTheVoucherList(){
         this.spinnerOn=true;
-        getEmployeeList({empName: this.searchKey})
+        getVoucherList({cerName: this.searchKey})
         .then(data=>{
             let result = [];
             data.forEach(dataItem=>{
                 let tempData = Object.create(dataItem);
-// NavigationMixin for record URL 
+                tempData.certificationName = dataItem.Certification__r.Name;
+// NavigationMixin for Voucher Record URL 
                 this[NavigationMixin.GenerateUrl]({
                     type: 'standard__recordPage',
                     attributes: {
@@ -59,15 +37,24 @@ export default class EmployeeDetails extends NavigationMixin(LightningElement) {
                         actionName: 'view',
                     },
                 }).then((url) => {
-                    tempData.EmployeeUrl = url;
+                    tempData.voucherUrl = url;
                 });
-                // tempData.EmployeeUrl = '/'+dataItem.Id;
+// NavigationMixin for Certification Record URL 
+                this[NavigationMixin.GenerateUrl]({
+                    type: 'standard__recordPage',
+                    attributes: {
+                        recordId: dataItem.Certification__c,
+                        actionName: 'view',
+                    },
+                }).then((url) => {
+                    tempData.certificationUrl = url;
+                });
                 tempData.empObject = dataItem;
                 result.push(tempData);
             });
-            this.fullEmpList = result;
-            this.empList = this.fullEmpList.slice(this.startSize,this.endSize);
-            this.isPaginate = this.fullEmpList.length >this.pageSize;
+            this.fullVouList = result;
+            this.vouList = this.fullVouList.slice(this.startSize,this.endSize);
+            this.isPaginate = this.fullVouList.length >pageSize;
 //Turn off spinner loading
             this.spinnerOn=false;
         })
@@ -75,7 +62,7 @@ export default class EmployeeDetails extends NavigationMixin(LightningElement) {
             console.log(error);
             this.spinnerOn=false;
             const toastEvent = new ShowToastEvent({
-                title:'Error in fetching Employee Records',
+                title:'Error in fetching Vouchers',
                 message:error,
                 variant:'error',
                 mode:'dismissible'
@@ -84,14 +71,26 @@ export default class EmployeeDetails extends NavigationMixin(LightningElement) {
         })
     }
 
-//Filter employee recods based on Name - fires when inputText is chaged
-    filterEmployeeRecords(event){
+// Call the getTheVoucherList() when the page is loaded for the first time.
+    connectedCallback(){
+        this.getTheVoucherList();
+        //Success toast message
+        const toastEvent = new ShowToastEvent({
+            title:'Loaded Voucher Details',
+            variant:'Success',
+            mode:'dismissible'
+        });
+        this.dispatchEvent(toastEvent);
+    }
+
+//Filter voucher recods based on Certification Name - fires when inputText is chaged
+    filterVoucherRecords(event){
         this.searchKey=event.target.value;
-        this.getTheEmployeeList();        
+        this.getTheVoucherList();        
     }
 
 //New Employee Record Form
-    employeeObject = EMPLOYEE_OBJECT;
+    voucherObject = VOUCHER_OBJECT;
 
 //New Employee Modal
     @track isShowModal = false;
@@ -111,10 +110,9 @@ export default class EmployeeDetails extends NavigationMixin(LightningElement) {
                 variant: 'success'
             })
         );
+        this.getTheVoucherList();
         this.isShowModal = false;
-       // eval("$A.get('e.force:refreshView').fire();");
     }
-
 
 //Pagination
     startSize = 0;

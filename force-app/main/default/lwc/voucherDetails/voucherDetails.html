@@ -1,0 +1,64 @@
+<template>
+    <lightning-card>
+        <template if:true={spinnerOn}>
+            <div class="exampleHolder">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+<!-- Button to display New Employee Modal -->
+        <lightning-button variant="brand" label="Add New Voucher" title="Add New Voucher" onclick={showModalBox}></lightning-button>        
+<!-- Input for Search keyword  -->
+        <lightning-input placeholder = "Enter Certification Name" onkeyup={filterVoucherRecords}></lightning-input>
+<!-- Datatable to show employee records -->
+        <lightning-datatable 
+            key-field="id" 
+            data={vouList} 
+            columns={columns}
+            hide-checkbox-column>
+        </lightning-datatable>
+        <br/>
+        <template if:true={isPaginate}>
+            <lightning-button-group>
+                <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
+                <lightning-button label="Next" onclick={handleNext}></lightning-button>
+            </lightning-button-group>
+        </template>
+<!-- MODAL for NEW VOUCHER Form -->
+<template if:true={isShowModal}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">                
+        <div class="slds-modal__container">
+            <header class = "slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                    <lightning-icon icon-name="utility:close" alternative-text="Close" variant="inverse" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Voucher Details</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+<!-- LIGHTNING RECORD EDIT FORM for NEW VOUCHER -->
+                <lightning-record-edit-form object-api-name="Voucher__c" onsuccess={handleSuccess}>
+                    <lightning-messages></lightning-messages>
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input-field field-name="Name" required></lightning-input-field>
+                            <lightning-input-field field-name="Certification__c" required></lightning-input-field>
+                            <lightning-input-field field-name="Validity__c" required></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input-field field-name="Voucher_Cost__c"></lightning-input-field>
+                            <lightning-input-field field-name="Comments__c" required></lightning-input-field>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                        <button class="slds-button slds-button_brand" type="submit">Confirm</button>
+                    </footer>
+                </lightning-record-edit-form>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+
+    </lightning-card>
+</template>
