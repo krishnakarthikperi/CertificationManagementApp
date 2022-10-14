@@ -98,6 +98,9 @@ export default class CertificationDetails extends NavigationMixin(LightningEleme
             })
         );
        // eval("$A.get('e.force:refreshView').fire();");
+       this.isShowModal = false;
+       this.getTheCertificationList();
+
     }
 
 

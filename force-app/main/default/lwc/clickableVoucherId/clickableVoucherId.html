@@ -1,0 +1,10 @@
+<template>
+    <div class="slds-box slds-box_xx-small slds-theme_shade" onmouseover={handleMouseOver} onmouseout={handleMouseOut}>
+        <!-- PopOver on Hover for Employee -->
+            <div style="display:none;position: absolute;opacity:0" class="ModelTooltip">
+                <c-voucher-popover-layout topmargin={topmargin} leftmargin={leftmargin} record-id={objRecordId} vou-obj={vouObject}></c-voucher-popover-layout>
+            </div>
+            <lightning-icon icon-name="utility:info" alternative-text="More Detials" variant="warning"  onclick={handleOnClick}></lightning-icon>
+        </div>
+        
+</template>

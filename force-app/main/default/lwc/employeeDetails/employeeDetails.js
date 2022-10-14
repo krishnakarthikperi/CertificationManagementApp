@@ -112,6 +112,7 @@ export default class EmployeeDetails extends NavigationMixin(LightningElement) {
             })
         );
         this.isShowModal = false;
+        this.getTheEmployeeList();
        // eval("$A.get('e.force:refreshView').fire();");
     }
 
@@ -124,17 +125,17 @@ export default class EmployeeDetails extends NavigationMixin(LightningElement) {
         if(this.startSize>0){
         this.startSize = this.startSize - pageSize;
         this.endSize = this.endSize - pageSize;
-        this.vouList = this.fullVouList.slice(this.startSize,this.endSize); 
+        this.empList = this.fullEmpList.slice(this.startSize,this.endSize); 
         if(this.startSize==0) this.template.querySelectorAll('lightning-button')[1].disabled = true;
-        this.template.querySelector('lightning-button')[2].disabled = this.endSize>=this.fullVouList.length;
+        this.template.querySelector('lightning-button')[2].disabled = this.endSize>=this.fullEmpList.length;
         }
     }
     handleNext(){
-        if(this.endSize<this.fullVouList.length){
+        if(this.endSize<this.fullEmpList.length){
         this.startSize = this.startSize + pageSize;
         this.endSize = this.endSize + pageSize;
         if(this.startSize!=0) this.template.querySelectorAll('lightning-button')[1].disabled = false;
-        this.vouList = this.fullVouList.slice(this.startSize,this.endSize);
+        this.empList = this.fullEmpList.slice(this.startSize,this.endSize);
         } 
     }
 }

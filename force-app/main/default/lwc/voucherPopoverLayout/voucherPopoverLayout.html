@@ -1,0 +1,131 @@
+<template>
+    <template if:true={recordId}>
+        <section aria-labelledby="panel-heading-id" class="slds-popover slds-popover_panel slds-nubbin_left-top" role="dialog">
+            <!-- <button class="slds-button slds-button_icon slds-button_icon slds-button_icon-small slds-float_right slds-popover__close" title="Close dialog">
+                <svg class="slds-button__icon" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                </svg>
+                <span class="slds-assistive-text">Close dialog</span>
+            </button> -->
+            <div class="slds-popover__header">
+                <header class="slds-media slds-media_center slds-m-bottom_small">
+                    <span class="slds-icon_container slds-icon-standard-account slds-media__figure">
+                        <lightning-icon icon-name="standard:coupon_codes" alternative-text="Voucher Icon"></lightning-icon>
+                    </span>
+                    <div class="slds-media__body">
+                        <h2 class="slds-text-heading_medium slds-hyphenate" id="panel-heading-id">
+                            <a href="#">{vouObj.Name}</a>
+                        </h2>
+                    </div>
+                </header>
+                <footer class="slds-grid slds-wrap slds-grid_pull-padded">
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Voucher Cost">Voucher Cost</p>
+                            </dt>
+                            <dd>
+                                <p class="slds-truncate" title="Voucher Cost Value">{vouObj.Voucher_Cost__c}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Validity">Validity</p>
+                            </dt>
+                            <dd>
+                                <p class="slds-truncate" title="Validity Value">{vouObj.Validity__c}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Active">Active</p>
+                            </dt>
+                            <dd>
+                                <a href="#">{vouObj.Active__c}</a>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="slds-p-horizontal_small slds-p-bottom_x-small">
+                        <dl>
+                            <dt>
+                                <p class="slds-popover_panel__label slds-truncate" title="Comments">Comments</p>
+                            </dt>
+                            <dd>
+                                <p class="slds-truncate" title="Comments Value">{vouObj.Comments__c}</p>
+                            </dd>
+                        </dl>
+                    </div>
+                </footer>
+            </div>
+            <div class="slds-popover__body">
+                <dl class="slds-popover__body-list">
+                    <dt class="slds-m-bottom_small">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container slds-icon-standard-case">
+                                    <lightning-icon icon-name="standard:contract" alternative-text="Certification Icon"></lightning-icon>
+                                    <span class="slds-assistive-text">Certification</span>
+                                </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-heading_small slds-hyphenate">Certification</p>
+                            </div>
+                        </div>
+                    </dt>
+                    <dd class="slds-m-top_x-small">
+                        <p class="slds-truncate" title="Tesla - Anypoint Studios">
+                            <a href="#">{vouObj.Certification__r.Name}</a>
+                        </p>
+                        <dl class="slds-list_horizontal slds-wrap slds-text-body_small">
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Comments">Comments</dt>
+                            <dd class="slds-item_detail slds-text-color_weak slds-truncate" title="Comments Value">{vouObj.Certification__r.Comments__c}</dd>
+                        </dl>
+                    </dd>
+                </dl>
+
+                <dl class="slds-popover__body-list">
+                    <dt class="slds-m-bottom_small">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container slds-icon-standard-opportunity">
+                                    <lightning-icon icon-name="standard:skill_requirement" alternative-text="Certification Request Icon"></lightning-icon>
+                                    <span class="slds-assistive-text">Certification Request</span>
+                                </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-heading_small slds-hyphenate">Certification Request</p>
+                            </div>
+                        </div>
+                    </dt>
+                    <template if:false={vouObj.Certification_Requests__r}>
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Certification">No Certification Requests Found</dt>
+                    </template>
+                    <template if:true={vouObj.Certification_Requests__r}>
+                        <template for:each={vouObj.Certification_Requests__r} for:item="CerReq">
+                            <dd class="slds-m-top_x-small" key={CerReq.Id}>
+                                <p class="slds-truncate" title={CerReq.Name}>
+                                    <a href="#">{CerReq.Name}</a>
+                                </p>
+                                <dl class="slds-list_horizontal slds-wrap slds-text-body_small">
+                                    <dt class="slds-item_label slds-text-color_default slds-truncate" title="Certification">Certification</dt>
+                                    <dd class="slds-item_detail slds-text-color_weak slds-truncate" title={vouObj.Certification__r.Name}>{vouObj.Certification__r.Name}</dd>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Status">Status</dt>
+                                    <dd class="slds-item_detail slds-text-color_weak slds-truncate" title={CerReq.Status__c}>{CerReq.Status__c}</dd>
+                                    <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Due Date">Due Date</dt>
+                                    <dd class="slds-item_detail slds-text-color_weak slds-truncate" title={CerReq.Due_Date__c}>{CerReq.Due_Date__c}</dd>
+                                </dl>
+                            </dd>
+                        </template>
+                    </template>
+                </dl>
+            </div>
+        </section>
+
+    </template>
+  </div>  
+
+</template>

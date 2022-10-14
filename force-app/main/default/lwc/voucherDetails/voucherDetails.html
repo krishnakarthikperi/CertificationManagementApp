@@ -10,12 +10,12 @@
 <!-- Input for Search keyword  -->
         <lightning-input placeholder = "Enter Certification Name" onkeyup={filterVoucherRecords}></lightning-input>
 <!-- Datatable to show employee records -->
-        <lightning-datatable 
+        <c-custom-data-table 
             key-field="id" 
             data={vouList} 
             columns={columns}
             hide-checkbox-column>
-        </lightning-datatable>
+        </c-custom-data-table>
         <br/>
         <template if:true={isPaginate}>
             <lightning-button-group>

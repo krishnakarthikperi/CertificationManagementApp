@@ -5,6 +5,7 @@ import { NavigationMixin } from 'lightning/navigation';
 import VOUCHER_OBJECT from '@salesforce/schema/Voucher__c';
 
 const cols=[
+    {label:'Voucher ID',fieldName:'Name',type:'clickableVoucherId',typeAttributes:{recordId:{fieldName:'Id'},recordObject:{fieldName:'vouObject'}}},
     {label:'Voucher ID',fieldName:'voucherUrl',type:'url',typeAttributes :{label:{fieldName:'Name'}}},
     {label:'Certification',fieldName:'certificationUrl',type:'url',typeAttributes :{label:{fieldName:'certificationName'}}},
     // {label:'Voucher Cost',fieldName:'Voucher_Cost__c'},
@@ -49,7 +50,7 @@ export default class VoucherDetails extends NavigationMixin(LightningElement) {
                 }).then((url) => {
                     tempData.certificationUrl = url;
                 });
-                tempData.empObject = dataItem;
+                tempData.vouObject = dataItem;
                 result.push(tempData);
             });
             this.fullVouList = result;
@@ -106,7 +107,7 @@ export default class VoucherDetails extends NavigationMixin(LightningElement) {
         this.dispatchEvent(                      
             new ShowToastEvent({
                 title: 'Success',
-                message: 'New Employee Added',
+                message: 'New Voucher Added',
                 variant: 'success'
             })
         );

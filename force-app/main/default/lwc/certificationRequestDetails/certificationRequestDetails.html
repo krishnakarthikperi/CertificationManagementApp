@@ -6,22 +6,13 @@
             </div>
         </template>
 <!-- Button to display New Employee Modal -->
-        <lightning-button variant="brand" label="New Employee" title="New Employee" onclick={showModalBox}>
-</lightning-button>        
+        <lightning-button variant="brand" label="New Certification Request" title="New Certification Request" onclick={showModalBox}></lightning-button>        
 <!-- Input for Search keyword  -->
-        <lightning-input type="search" placeholder = "Enter Employee Name" onkeyup={filterEmployeeRecords}></lightning-input>
-<!-- Datatable to show employee records -->
-        <!-- <lightning-datatable 
+        <lightning-input placeholder = "Enter Employee Name/Certification Name" onkeyup={filterCertificationRequestRecords}></lightning-input>
+        <c-custom-data-table 
             key-field="id" 
-            data={empList} 
+            data={cerReqList} 
             columns={columns}
-            hide-checkbox-column>
-        </lightning-datatable> -->
-        <c-custom-data-table
-            key-field="id"
-            data={empList}
-            columns={columns}
-            column-widths-mode="auto"
             hide-checkbox-column>
         </c-custom-data-table>
         <br/>
@@ -40,25 +31,21 @@
                             <lightning-icon icon-name="utility:close" alternative-text="Close" variant="inverse" size="small"></lightning-icon>
                                 <span class="slds-assistive-text">Close</span>
                         </button>
-                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Employee Details</h2>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Certification Request Details</h2>
                     </header>
                     <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-
-
 <!-- LIGHTNING RECORD EDIT FORM for NEW EMPLOYEE -->
-                        <lightning-record-edit-form object-api-name="Employee__c" onsuccess={handleSuccess}>
+                        <lightning-record-edit-form object-api-name="Certification_Request__c" onsuccess={handleSuccess}>
                             <lightning-messages></lightning-messages>
                             <div class="slds-grid">
                                 <div class="slds-col slds-size_1-of-2">
-                                    <lightning-input-field field-name="Name" required></lightning-input-field>
-                                    <lightning-input-field field-name="Employee_Name__c" required></lightning-input-field>
-                                    <lightning-input-field field-name="Email__c" required></lightning-input-field>
+                                    <lightning-input-field field-name="Certification__c" required></lightning-input-field>
+                                    <lightning-input-field field-name="Employee__c" required></lightning-input-field>
+                                    <lightning-input-field field-name="Comments__c" required></lightning-input-field>
                                 </div>
                                 <div class="slds-col slds-size_1-of-2">
-                                    <lightning-input-field field-name="Primary_Skill__c" required></lightning-input-field>
-                                    <lightning-input-field field-name="Secondary_Skill__c"></lightning-input-field>
-                                    <lightning-input-field field-name="Experience__c"></lightning-input-field>
-                                    <lightning-input-field field-name="Comments__c"></lightning-input-field>
+                                    <lightning-input-field field-name="Email__c" required></lightning-input-field>
+                                    <lightning-input-field field-name="Due_Date__c" required></lightning-input-field>
                                 </div>
                             </div>
                             <footer class="slds-modal__footer">
@@ -66,23 +53,11 @@
                                 <button class="slds-button slds-button_brand" type="submit">Confirm</button>
                             </footer>
                         </lightning-record-edit-form>
-
-
-
-
-<!-- LIGHTNING RECORD FORM for NEW EMPLOYEE -->
-                        <!-- <lightning-record-form
-                        object-api-name={employeeObject}
-                        layout-type = "Full">
-                        </lightning-record-form> -->
                     </div>
-                    <!-- <footer class = "slds-modal__footer">
-                        <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
-                    </footer> -->
                 </div>
             </section>
             <div class="slds-backdrop slds-backdrop_open"></div>
         </template>
-
+       
     </lightning-card>
 </template>
