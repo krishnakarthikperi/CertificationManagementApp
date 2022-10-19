@@ -3,6 +3,7 @@ import clickableEmployeeIdTemplate from './clickableEmployeeIdTemplate.html';
 import clickableVoucherIdTemplate from './clickableVoucherIdTemplate.html';
 import submitForApprovalButtonTemplate from './submitForApprovalButtonTemplate.html';
 import processApprovalButtonTemplate from './processApprovalButtonTemplate.html';
+import employeeCardPopoverTemplate from './employeeCardPopoverTemplate.html';
 
 export default class CustomDataTable extends LightningDatatable {
     static customTypes={
@@ -25,6 +26,11 @@ export default class CustomDataTable extends LightningDatatable {
             template:processApprovalButtonTemplate,
             standardCellLayout:true,
             typeAttributes:['recordId','recordObject','processInstanceWorkItemObject']
+        },
+        employeeCardPopover:{
+            template:employeeCardPopoverTemplate,
+            standardCellLayout:true,
+            typeAttributes:['recordId','recordObject']
         }
     };
 }

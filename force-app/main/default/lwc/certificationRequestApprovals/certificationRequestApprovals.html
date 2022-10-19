@@ -1,24 +1,28 @@
 <template>
     <lightning-card>
         <template if:true={spinnerOn}>
-            <div class="exampleHolder">
+            <div class="exampleHolder" onrefreshapprovalsdata={getThePendingApprovals}>
                 <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
             </div>
         </template>
 <!-- Input for Search keyword  -->
-        <lightning-input placeholder = "Enter Employee Name/Certification Name" onkeyup={filterCertificationRequestRecords}></lightning-input>
-        <c-custom-data-table 
-            key-field="id" 
-            data={cerReqApprList} 
-            columns={columns}
-            hide-checkbox-column>
-        </c-custom-data-table>
-        <br/>
-        <template if:true={isPaginate}>
-            <lightning-button-group>
-                <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
-                <lightning-button label="Next" onclick={handleNext}></lightning-button>
-            </lightning-button-group>
-        </template>
+<div class="slds-align_absolute-center"></div>
+        <div class="slds-p-around_x-small">
+            <lightning-input type='search' placeholder = "Enter Employee Name/Employee Id/Certification Name..." onkeyup={filterPendingApprovalRecords}></lightning-input>
+            <br/>
+            <c-custom-data-table 
+                key-field="id" 
+                data={cerReqApprList} 
+                columns={columns}
+                hide-checkbox-column>
+            </c-custom-data-table>
+            <br/>
+            <template if:true={isPaginate}>
+                <lightning-button-group>
+                    <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
+                    <lightning-button label="Next" onclick={handleNext}></lightning-button>
+                </lightning-button-group>
+            </template>
+        </div>
     </lightning-card>
 </template>

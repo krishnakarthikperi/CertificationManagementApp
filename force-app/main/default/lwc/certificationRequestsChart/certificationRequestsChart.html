@@ -1,0 +1,15 @@
+<template>
+    <lightning-card>
+        <c-chart type="radar">
+            <c-dataset labels={superLabel}>
+                <c-data label="My First dataset" detail={superDetail}
+                backgroundcolor="rgba(82, 183, 216, 0.2)" bordercolor="rgba(82, 183, 216, 1)"
+                pointhoverbackgroundcolor="#000" pointhoverbordercolor="#000"></c-data>
+                <!-- <c-data label="My Second dataset" detail="[28, 48, 40, 19, 96, 27, 100]"
+                    backgroundcolor="rgba(255, 176, 59, 0.2)" bordercolor="rgba(255, 176, 59, 1)"></c-data> -->
+                </c-dataset>
+                <c-radial-linear-axis tick-min="0" tick-stepsize="1"></c-radial-linear-axis>
+                <c-title text="# Certification Requests - Status Wise"></c-title>
+            </c-chart>
+    </lightning-card>
+</template>

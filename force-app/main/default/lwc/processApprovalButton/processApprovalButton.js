@@ -1,6 +1,7 @@
 import { LightningElement,track,api } from 'lwc';
 import processSingleApproval from '@salesforce/apex/CertificationRequestApprovalsCtrl.processSingleApproval';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import getProfileName from '@salesforce/apex/GetCurrentProfileDetails.getProfileName';
 
 export default class ProcessApprovalButton extends LightningElement {
     // @api cerReqId;
@@ -8,7 +9,36 @@ export default class ProcessApprovalButton extends LightningElement {
     @api pwiId;         //ProcessWorkItem
     approverComment='';
     showSubmitButton;
-    
+    profileName='';
+
+/*     constructor(){
+        super();
+        getProfileName()
+        .then(data=>{
+            this.profileName = data;
+            console.log(data);
+        })
+        .catch(error=>{
+            console.log(error);
+        });
+    }
+    */
+    renderedCallback(){
+        getProfileName()
+        .then(data=>{
+            this.profileName = data;
+            console.log(data);
+            if(this.profileName!='CMA App User'){
+                console.log(this.profileName)
+                console.log('inside if');
+                console.log(this.template.querySelectorAll('lightning-button')[0].label);
+                this.template.querySelectorAll('lightning-button')[0].disabled=false;
+            }
+        })
+        .catch(error=>{
+            console.log(error);
+        });
+    }
     handleComments(event){
         this.approverComment = event.target.value;
         if(this.approverComment!=''){
@@ -35,6 +65,8 @@ export default class ProcessApprovalButton extends LightningElement {
                 mode:'dismissible'
             });
             this.dispatchEvent(toastEvent);
+            this.hideModalBox();
+            this.dispatchEvent(new CustomEvent('refreshapprovalsdata'));
         })
         .catch(error=>{
             console.log(error);

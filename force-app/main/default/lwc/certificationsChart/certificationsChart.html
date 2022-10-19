@@ -1,0 +1,15 @@
+<template>
+    <lightning-card>
+        <c-chart type="polarArea">
+            <c-dataset labels={superLabel}>
+                <c-data label="# of Certified Resources" detail={superDetail}
+                backgroundcolor={superColor}
+                bordercolor={superColor}>
+                </c-data>
+            </c-dataset>
+            <c-legend position="left"></c-legend>
+            <c-title text="# of Certification Requested"></c-title>
+            <c-radial-linear-axis tick-min="0" tick-stepsize="1"></c-radial-linear-axis>
+         </c-chart>
+    </lightning-card>
+</template>

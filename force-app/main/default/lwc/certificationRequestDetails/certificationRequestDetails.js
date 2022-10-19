@@ -1,14 +1,23 @@
-import { LightningElement,track } from 'lwc';
+import { LightningElement,track, wire } from 'lwc';
 import getCertificatioRequestList from '@salesforce/apex/CertificationRequestLWCCtrl.getCertificatioRequestList';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import CERTIFICATION_REQUEST_OBJECT from '@salesforce/schema/Certification_Request__c';
+import IMAGES from '@salesforce/resourceUrl/CMAImages';
 
+//========Import for Kanban Mode START======
+import { getListUi } from 'lightning/uiListApi';
+import { updateRecord } from 'lightning/uiRecordApi';
+import {refreshApex} from '@salesforce/apex';
+import { getPicklistValues,getObjectInfo } from 'lightning/uiObjectInfoApi';
+import STATUS_FIELD from '@salesforce/schema/Certification_Request__c.Status__c';
+import ID_FIELD from '@salesforce/schema/Certification_Request__c.Id';
+//========Import for Kanban Mode END======
 
 const cols=[
-    {label:'Certification Request Number',fieldName:'Name'},
-    {label:'Certification',fieldName:'CertificationName'},
-    {label:'Employee Name',fieldName:'EmployeeName'},
+    {label:'Certification Request Number',fieldName:'CertificationRequestUrl',type:'url',typeAttributes:{label:{fieldName:'Name'}}},
+    {label:'Certification',fieldName:'CertificationUrl',type:'url',typeAttributes:{label:{fieldName:'CertificationName'}}},
+    {label:'Employee Name',fieldName:'EmployeeUrl',type:'url',typeAttributes:{label:{fieldName:'EmployeeName'}}},
     {label:'Employee Id',fieldName:'EmployeeId'},
     {label:'Approval Submission',fieldName:'Status__c',type:'submitForApprovalButton',typeAttributes:{recordID:{fieldName:'cerReqId'},recordObject:{fieldName:'cerReqObject'}}}
 //    {label:'Approval Submission',fieldName:'Status__c',type:'submitForApprovalButton',typeAttribues:{recordId:{fieldName:'cerReqId'},recordObject:{fieldName:'cerReqObject'}}}   
@@ -22,6 +31,7 @@ export default class CertificationRequestDetails extends NavigationMixin(Lightni
     columns=cols;
     searchKey='';
 
+    cerReqIcon = IMAGES + '/certificateRequest.png'
 // Get Certification Request Records using Apex Class
 getTheCertificatioRequestList(){
         this.spinnerOn=true;
@@ -72,7 +82,7 @@ getTheCertificatioRequestList(){
             this.fullCerReqList = result;
             console.table(this.fullCerReqList)
             this.cerReqList = this.fullCerReqList.slice(this.startSize,this.endSize);
-            this.isPaginate = this.fullCerReqList.length >this.pageSize;
+            this.isPaginate = this.fullCerReqList.length >pageSize;
 //Turn off spinner loading
             this.spinnerOn=false;
         })
@@ -146,6 +156,9 @@ getTheCertificatioRequestList(){
         }
     }
     handleNext(){
+        // console.log(this.template.querySelectorAll('lightning-button')[0].label)
+        // console.log(this.template.querySelectorAll('lightning-button')[1].label)
+        // console.log(this.template.querySelectorAll('lightning-button')[2].label)
         if(this.endSize<this.fullCerReqList.length){
         this.startSize = this.startSize + pageSize;
         this.endSize = this.endSize + pageSize;
@@ -154,4 +167,74 @@ getTheCertificatioRequestList(){
         } 
     }
 
+    
+// View Selector
+    viewValue=false;
+    get listViewRadioOptions(){
+        return [
+            { label: 'List View', value: 'false' },
+            { label: 'Table View', value: 'true' },
+            ]
+    }
+    handleViewChange(){
+        this.viewValue=!this.viewValue;
+    }
+
+//Modular button button handler
+    handleCertificationRequestViewDetails(event){
+        console.log(event.target.value);
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: event.target.value,
+                objectApiName: 'Certification_Request__c',
+                actionName: 'view'
+            },
+        });
+
+    }
+/*
+//========Kanban Mode START======
+    records;
+    pickVals;
+    recordId;
+    @wire(getListUi,{
+        objectApiName: CERTIFICATION_REQUEST_OBJECT,
+        listViewApiName:'All'
+    })wiredListView({error,data}){
+        if(data){
+            console.log("getListUi",data)
+            this.records = data.records.records.map(item=>{
+                let field = item.fields;
+                let certificationRequest = field.Certification_Request__c.value.fields;
+                return {'Id': field.Id.value,'Name':field.Name.Value,'Status':field.Status__c.value}
+            })
+        }
+        if(error){
+            console.error(error);
+        }
+    }
+
+    @wire(getObjectInfo,{objectApiName:CERTIFICATION_REQUEST_OBJECT})
+    objectInfo;
+
+    @wire(getPicklistValues,{
+        recordTypeId:'$objectInfo.data.defaultRecordTypeId',
+        fieldApiName:STATUS_FIELD
+    })stagePicklistValues({data,error}){
+        if(data){
+            console.log("Stage Picklist",data)
+            this.pickVals = data.values.map(item=>item.value)
+        }
+        if(error){
+            console.error(error)
+        }
+    }
+
+    get calcWidth(){
+        let len = this.pickVals.length+1
+        return `width: calc(100vw/${len})`
+    }
+//========Kanban Mode END======
+*/    
 }

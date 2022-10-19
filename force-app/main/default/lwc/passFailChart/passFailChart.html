@@ -1,0 +1,15 @@
+<template>
+    <lightning-card>
+        <c-chart type="bar" responsive="true" stylecss="position: relative; margin: auto;" events='["click"]'>
+            <c-dataset labels={superLabel}>
+            <c-data label="Count" detail={superDetail} backgroundcolor={colors} bordercolor={colors} borderwidth="1"></c-data>
+            </c-dataset>
+            <c-title text="Employees Passed and Failed"></c-title>
+            <c-legend position="right"></c-legend>
+            <c-animation duration="2000" easing="easeInBounce"> </c-animation>
+            <c-cartesian-category-axis axis="x" position="top"></c-cartesian-category-axis>
+            <c-cartesian-linear-axis ticks-beginatzero="true" ticks-stepsize="1"></c-cartesian-linear-axis>
+            </c-chart>
+        </lightning-card>
+    
+</template>

@@ -5,32 +5,62 @@
                 <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
             </div>
         </template>
+        <div class="slds-p-around_x-small">
 <!-- Button to display New Employee Modal -->
-        <lightning-button variant="brand" label="New Employee" title="New Employee" onclick={showModalBox}>
+        <lightning-button icon-name="utility:adduser" variant="brand" label="New Employee" title="New Employee" onclick={showModalBox}>
 </lightning-button>        
 <!-- Input for Search keyword  -->
         <lightning-input type="search" placeholder = "Enter Employee Name" onkeyup={filterEmployeeRecords}></lightning-input>
+<!-- Radio toggle for List/Table view -->
+        <lightning-radio-group name="radioGroup"
+                        label="Select View"
+                        options={listViewRadioOptions}
+                        value={viewValue}
+                        type="button"
+                        onchange={handleViewChange}>
+        </lightning-radio-group>
+        </div>
+    </lightning-card>
+    <br/><br/>
+    <lightning-card>
 <!-- Datatable to show employee records -->
-        <!-- <lightning-datatable 
-            key-field="id" 
-            data={empList} 
-            columns={columns}
-            hide-checkbox-column>
-        </lightning-datatable> -->
-        <c-custom-data-table
-            key-field="id"
-            data={empList}
-            columns={columns}
-            column-widths-mode="auto"
-            hide-checkbox-column>
-        </c-custom-data-table>
-        <br/>
-        <template if:true={isPaginate}>
-            <lightning-button-group>
-                <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
-                <lightning-button label="Next" onclick={handleNext}></lightning-button>
-            </lightning-button-group>
+    <div class="slds-p-around_x-small">        
+        <template if:true={viewValue}>
+            <c-custom-data-table
+                key-field="id"
+                data={empList}
+                columns={columns}
+                column-widths-mode="auto"
+                hide-checkbox-column>
+            </c-custom-data-table>
+            <br/>
+            <template if:true={isPaginate}>
+                <lightning-button-group>
+                    <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
+                    <lightning-button label="Next" onclick={handleNext}></lightning-button>
+                </lightning-button-group>
+            </template>
         </template>
+    </div>
+<!-- Modular view of records -->
+    <div class="slds-p-around_x-small">
+        <template if:false={viewValue}>
+            <lightning-layout multiple-rows="true" pull-to-boundary="small">
+                <template for:each={empList} for:item="item">
+                    <lightning-layout-item key={item.Id} size="4" class="slds-p-around_x-small">
+                        <c-employee-card-popover emp-id={item.Id} record-id={item.Id} emp-object={item.empObject}></c-employee-card-popover>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+            <template if:true={isPaginate}>
+                <lightning-button-group>
+                    <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
+                    <lightning-button label="Next" onclick={handleNext}></lightning-button>
+                </lightning-button-group>
+            </template>
+        </template>
+    </div>
+
 <!-- Modal for New Employee Form -->
         <template if:true={isShowModal}>
             <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">                

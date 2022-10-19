@@ -4,24 +4,27 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import EMPLOYEE_OBJECT from '@salesforce/schema/Employee__c';
 import getEmployeeRelatedList from '@salesforce/apex/EmployeeLWCCtrl.getEmployeeRelatedList'
 import { NavigationMixin } from 'lightning/navigation';
+import IMAGES from '@salesforce/resourceUrl/CMAImages';
+// import {handleMouseOver} from 'c/clickableEmployeeId.handleMouseOver';
+// import {handleMouseOut} from 'c/clickableEmployeeId.handleMouseOut';
 
 const cols =[
-    // {label:'Employee ID',fieldName:'Name',type:'text',initialWidth:80,cellAttributes: { alignment: 'left' }},
     // {label:'Name',fieldName:'Employee_Name__c',type:'text',initialWidth:200,cellAttributes: { alignment: 'left' }},
-    {label:'Employee ID',fieldName:'Name',type:'clickableEmployeeId',cellAttributes: { alignment: 'left'},typeAttributes:{recordId:{fieldName:'Id'},recordObject:{fieldName:'empObject'}}},
+    {label:'More Info',fieldName:'Name',type:'clickableEmployeeId',cellAttributes: { alignment: 'left'},typeAttributes:{recordId:{fieldName:'Id'},recordObject:{fieldName:'empObject'}}},
+    {label:'Employee ID',fieldName:'Name',type:'text',initialWidth:80,cellAttributes: { alignment: 'left' }},
     {label:'Name',fieldName:'EmployeeUrl',type:'url',cellAttributes: { alignment: 'left' }, typeAttributes :{label:{fieldName:'Employee_Name__c'}}},
     {label:'Email',fieldName:'Email__c',type:'email',cellAttributes: { alignment: 'left' }},
     {label:'Experience',fieldName:'Experience__c',type:'number',fixedWidth:100,cellAttributes: { alignment: 'left' }}
 ];
 const pageSize = 10;
 export default class EmployeeDetails extends NavigationMixin(LightningElement) {
-    empList;
-    fullEmpList;
+    @track empList;
+    @track fullEmpList;
     spinnerOn = false;
     columns=cols;
     searchKey = '';
     //empMap;
-    
+    empIcon = IMAGES + '/employee1.png'
 // Call the getTheEmployeeList() when the page is loaded for the first time.
     connectedCallback(){
         this.getTheEmployeeList();
@@ -32,18 +35,21 @@ export default class EmployeeDetails extends NavigationMixin(LightningElement) {
             mode:'dismissible'
         });
         this.dispatchEvent(toastEvent);
-
+        console.log('End of connected call back');
 // Employee Details Map
-        getEmployeeRelatedList()
-        .then(data=>{
-            console.log(data);
-//            empMap=data;
-        })
-        .catch(error=>{
-            console.log(error);
-        })
+//         getEmployeeRelatedList()
+//         .then(data=>{
+//             console.log(data);
+// //            empMap=data;
+//         })
+//         .catch(error=>{
+//             console.log(error);
+//         })
     }
-    
+// // Call the getTheEmployeeList() as many times the page is rendered.
+//     renderedCallback(){
+//         this.getTheEmployeeList();    
+//     }
     getTheEmployeeList(){
         this.spinnerOn=true;
         getEmployeeList({empName: this.searchKey})
@@ -67,7 +73,7 @@ export default class EmployeeDetails extends NavigationMixin(LightningElement) {
             });
             this.fullEmpList = result;
             this.empList = this.fullEmpList.slice(this.startSize,this.endSize);
-            this.isPaginate = this.fullEmpList.length >this.pageSize;
+            this.isPaginate = this.fullEmpList.length >pageSize;
 //Turn off spinner loading
             this.spinnerOn=false;
         })
@@ -127,7 +133,7 @@ export default class EmployeeDetails extends NavigationMixin(LightningElement) {
         this.endSize = this.endSize - pageSize;
         this.empList = this.fullEmpList.slice(this.startSize,this.endSize); 
         if(this.startSize==0) this.template.querySelectorAll('lightning-button')[1].disabled = true;
-        this.template.querySelector('lightning-button')[2].disabled = this.endSize>=this.fullEmpList.length;
+        this.template.querySelectorAll('lightning-button')[2].disabled = this.endSize>=this.fullEmpList.length;
         }
     }
     handleNext(){
@@ -137,5 +143,17 @@ export default class EmployeeDetails extends NavigationMixin(LightningElement) {
         if(this.startSize!=0) this.template.querySelectorAll('lightning-button')[1].disabled = false;
         this.empList = this.fullEmpList.slice(this.startSize,this.endSize);
         } 
+    }
+
+// View Selector
+    viewValue=false;
+    get listViewRadioOptions(){
+        return [
+            { label: 'List View', value: 'false' },
+            { label: 'Table View', value: 'true' },
+            ]
+    }
+    handleViewChange(){
+        this.viewValue=!this.viewValue;
     }
 }

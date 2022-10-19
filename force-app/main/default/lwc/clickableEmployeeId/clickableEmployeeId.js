@@ -7,8 +7,8 @@ export default class ClickableEmployeeId extends LightningElement {
     @track objRecordId;
     @api empObject;
 
-    topmargin;
-    leftmargin;
+    @track topmargin;
+    @track leftmargin;
     showDiv;
     handleMouseOver(event){
         this.showDiv=true;
@@ -16,6 +16,7 @@ export default class ClickableEmployeeId extends LightningElement {
         this.objRecordId = this.recordId;
         this.leftmargin=event.clientX;
         this.topmargin=event.clientY;
+        console.log(this.topmargin,this.leftmargin);
         const toolTipDiv = this.template.querySelector('.ModelTooltip');
         toolTipDiv.style.opacity = 1;
         toolTipDiv.style.display = "block";

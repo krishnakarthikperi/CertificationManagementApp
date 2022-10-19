@@ -1,0 +1,24 @@
+<template>
+    <lightning-card>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_2-of-12 slds-align_absolute-center">
+                <span><lightning-button icon-name="utility:home" label="Home" variant="success" onclick={navigateToHome}></lightning-button></span>
+            </div>
+            <div class="slds-col slds-size_2-of-12 slds-align_absolute-center">
+                <span><lightning-button icon-name="utility:form" label="Certification Requests" variant="brand" onclick={navigateToCertificationRequests}></lightning-button></span>
+            </div>
+            <div class="slds-col slds-size_2-of-12 slds-align_absolute-center">
+                <span><lightning-button icon-name="utility:user" label="Employees" variant="brand" onclick={navigateToEmployees}></lightning-button></span>
+            </div>
+            <div class="slds-col slds-size_2-of-12 slds-align_absolute-center">
+                <span><lightning-button icon-name="utility:collection_alt" label="Certifications" variant="brand" onclick={navigateToCertifications}></lightning-button></span>
+            </div>
+            <div class="slds-col slds-size_2-of-12 slds-align_absolute-center">
+                <span><lightning-button icon-name="utility:coupon_codes" label="Vouchers" variant="brand" onclick={navigateToVouchers}></lightning-button></span>
+            </div>
+            <div class="slds-col slds-size_2-of-12 slds-align_absolute-center">
+                <span><lightning-button icon-name="utility:approval" label="Approvals" variant="brand" onclick={navigateToApprovals}></lightning-button></span>
+            </div>
+        </div>
+    </lightning-card>
+</template>

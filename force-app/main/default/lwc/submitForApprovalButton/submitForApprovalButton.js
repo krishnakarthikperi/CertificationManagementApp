@@ -35,7 +35,8 @@ export default class SubmitForApprovalButton extends LightningElement {
                 mode:'dismissible'
             });
             this.dispatchEvent(toastEvent);
-
+            this.hideModalBox();
+            this.dispatchEvent(new CustomEvent('refreshdata'));
         })
         .catch(error=>{
             console.log(error);
@@ -77,7 +78,8 @@ export default class SubmitForApprovalButton extends LightningElement {
     handleRadioGroupValueChange(event){
         console.log(event.target.value);
         this.radioGroupValue = event.target.value;
-       if(this.radioGroupValue!='') this.template.querySelectorAll('lightning-button')[2].disabled = false;
+        console.log(this.template.querySelectorAll('lightning-button')[1].label);
+       if(this.radioGroupValue!='') this.template.querySelectorAll('lightning-button')[1].disabled = false;
     }
     handleStatusUpdate(){
         // console.log(this.cerReqId);

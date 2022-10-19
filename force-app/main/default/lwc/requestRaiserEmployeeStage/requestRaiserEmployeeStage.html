@@ -1,0 +1,49 @@
+<template>
+    <lightning-card>
+    <c-chart type="bar" responsive="true" stylecss="position: relative; margin: auto;" events='["click"]'>
+         <c-dataset labels='["Blue", "Orange", "Yellow", "Green", "Light Blue", "Purple"]'>
+          <c-data label="# of Votes" detail="[12, 19, 7, 9, 5, 15]" backgroundcolor='[
+           "rgba(82, 183, 216, 0.2)",
+           "rgba(225, 96, 50, 0.2)",
+           "rgba(255, 176, 59, 0.2)",
+           "rgba(84, 167, 123, 0.2)",
+           "rgba(79, 210, 210, 0.2)",
+           "rgba(226, 135, 178, 0.2)"
+           ]' bordercolor='[
+            "rgba(82, 183, 216, 1)",
+            "rgba(225, 96, 50, 1)",
+            "rgba(255, 176, 59, 1)",
+            "rgba(84, 167, 123, 1)",
+            "rgba(79, 210, 210, 1)",
+            "rgba(226, 135, 178, 1)"
+           ]' borderwidth="1"></c-data>
+         </c-dataset>
+         <c-title text="Bar Chart"></c-title>
+         <c-legend position="right"></c-legend>
+         <c-animation duration="2000" easing="easeInBounce"> </c-animation>
+         <c-cartesian-category-axis axis="x" position="top"></c-cartesian-category-axis>
+        </c-chart>
+    </lightning-card>
+        <!-- <lightning-quick-action-panel header="Employee Detials">
+        <lightning-record-edit-form object-api-name="Employee__c" onsuccess={handleSuccess}>
+            <lightning-messages></lightning-messages>
+            <div class="slds-grid">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input-field field-name="Name" required value={empIdNumber} name="Name" onchange={fieldValueChange}></lightning-input-field>
+                    <lightning-input-field field-name="Employee_Name__c" required value={empName} name="Employee_Name__c" onchange={fieldValueChange}></lightning-input-field>
+                    <lightning-input-field field-name="Email__c" required value={empEmail} name="Email__c" onchange={fieldValueChange}></lightning-input-field>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input-field field-name="Primary_Skill__c" required value={empPrimarySkill} name="Primary_Skill__c" onchange={fieldValueChange}></lightning-input-field>
+                    <lightning-input-field field-name="Secondary_Skill__c" value={empSecondarySkill} name="Secondary_Skill__c" onchange={fieldValueChange}></lightning-input-field>
+                    <lightning-input-field field-name="Experience__c" value={empExperience} name="Experience__c" onchange={fieldValueChange}></lightning-input-field>
+                    <lightning-input-field field-name="Comments__c" value={empComments} name="Comments__c" onchange={fieldValueChange}></lightning-input-field>
+                </div>
+            </div>
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" type="button" onclick={hideModalBox}>Cancel</button>
+                <button class="slds-button slds-button_brand" type="button" onclick={handleNextPage}>Next Page</button>
+            </footer>
+        </lightning-record-edit-form>
+    </lightning-quick-action-panel> -->
+</template>

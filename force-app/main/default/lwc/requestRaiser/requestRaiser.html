@@ -1,0 +1,77 @@
+<template>
+    <c-navigation-component></c-navigation-component>
+    <br/>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_7-of-12" >
+            <template if:true={page1}>
+                <lightning-quick-action-panel header="Employee Detials">
+                    <lightning-record-edit-form object-api-name="Employee__c" onsuccess={handleSuccess}>
+                        <lightning-messages></lightning-messages>
+                            <div class="slds-grid">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Name" required value={empData.empIdNumber} name="Name" onchange={empFieldValueChange}></lightning-input-field>
+                                    <lightning-input-field field-name="Employee_Name__c" required value={empData.empName} name="Employee_Name__c" onchange={empFieldValueChange}></lightning-input-field>
+                                    <lightning-input-field field-name="Email__c" required value={empData.empEmail} name="Email__c" onchange={empFieldValueChange}></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input-field field-name="Primary_Skill__c" required value={empData.empPrimarySkill} name="Primary_Skill__c" onchange={empFieldValueChange}></lightning-input-field>
+                                    <lightning-input-field field-name="Secondary_Skill__c" value={empData.empSecondarySkill} name="Secondary_Skill__c" onchange={empFieldValueChange}></lightning-input-field>
+                                    <lightning-input-field field-name="Experience__c" required value={empData.empExperience} name="Experience__c" onchange={empFieldValueChange}></lightning-input-field>
+                                    <lightning-input-field field-name="Comments__c" value={empData.empComments} name="Comments__c" onchange={empFieldValueChange}></lightning-input-field>
+                                </div>
+                            </div>
+                            <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" type="button" onclick={hideModalBox}>Cancel</button>
+                        <button class="slds-button slds-button_brand" type="button" onclick={handleGoToCertificationPage}>Next Page</button>
+                    </footer>
+                </lightning-record-edit-form>
+            </lightning-quick-action-panel>
+        </template>
+        <template if:true={page2}>
+            <lightning-quick-action-panel header="Certification Detials">
+                <lightning-record-edit-form object-api-name="Certification__c">
+                    <lightning-messages></lightning-messages>
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input-field field-name="Name" value={cerData.cerName} required name="Name" onchange={cerFieldValueChange}></lightning-input-field>
+                            <lightning-input-field field-name="Comments__c" value={cerData.cerComments} name="Comments__c" onchange={cerFieldValueChange}></lightning-input-field>
+                        </div>
+                    </div>
+                </lightning-record-edit-form>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_destructive" type="button" onclick={handleReset}>Reset</button>
+                    <button class="slds-button slds-button_brand" type="button" onclick={handleGoToEmployeePage}>Previus Page</button>
+                    <button class="slds-button slds-button_brand" type="button" onclick={handleGoToCertificationRequestPage}>Next Page</button>
+                </footer>
+            </lightning-quick-action-panel>
+        </template>
+        <template if:true={page3}>
+            <lightning-quick-action-panel header="Certification Request Detials">
+                <lightning-record-edit-form object-api-name="Certification_Request__c">
+                    <lightning-messages></lightning-messages>
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_1-of-2">
+                            <!-- <lightning-input-field field-name="Certification__c" value={cerData.Name}  disabled required></lightning-input-field> -->
+                            <!-- <lightning-input-field field-name="Employee__c" value={empData.empName} disabled required></lightning-input-field> -->
+                            <lightning-input-field field-name="Comments__c" value={cerReqData.Comments__c} name="Comments__c" onchange={cerReqFieldValueChange} required></lightning-input-field>
+                            <lightning-input-field field-name="Due_Date__c" value={cerReqData.cerReqDueDate} name="Due_Date__c" onchange={cerReqFieldValueChange} required></lightning-input-field>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input-field field-name="Email__c" value={empData.empEmail} disabled required></lightning-input-field>
+                        </div>
+                    </div>
+                </lightning-record-edit-form>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_destructive" type="button" onclick={handleReset}>Reset</button>
+                    <button class="slds-button slds-button_brand" type="button" onclick={handleGoToCertificationPage}>Previus Page</button>
+                    <button class="slds-button slds-button_brand" type="button" onclick={handleSubmit}>Create Request</button>
+                </footer>
+            </lightning-quick-action-panel>
+        </template>
+    </div>
+    <div class="slds-col slds-size_5-of-12">
+        <c-certified-resources-chart></c-certified-resources-chart>
+        <c-certifications-chart></c-certifications-chart>
+    </div>
+</div>
+</template>

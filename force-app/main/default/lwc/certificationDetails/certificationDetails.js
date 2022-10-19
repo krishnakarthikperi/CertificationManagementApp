@@ -3,6 +3,7 @@ import getCertificationList from '@salesforce/apex/CertificationLWCCtrl.getCerti
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import CERTIFICATION_OBJECT from '@salesforce/schema/Certification__c';
 import { NavigationMixin } from 'lightning/navigation';
+import IMAGES from '@salesforce/resourceUrl/CMAImages';
 
 const cols = [
     {label:'Certification ID',fieldName:'Certification_ID__c',type:'text'},
@@ -16,8 +17,10 @@ export default class CertificationDetails extends NavigationMixin(LightningEleme
     columns=cols;
     searchKey='';
     spinnerOn = false;
-    certList;
-    fullCertList;
+    @track certList;
+    @track fullCertList;
+
+    cerIcon = IMAGES + '/certificate1.png';
 
 //Get Certification Records using Apex Class
     getTheCertificationList(){
@@ -100,7 +103,6 @@ export default class CertificationDetails extends NavigationMixin(LightningEleme
        // eval("$A.get('e.force:refreshView').fire();");
        this.isShowModal = false;
        this.getTheCertificationList();
-
     }
 
 
@@ -124,6 +126,18 @@ export default class CertificationDetails extends NavigationMixin(LightningEleme
         if(this.startSize!=0) this.template.querySelectorAll('lightning-button')[1].disabled = false;
         this.vouList = this.fullVouList.slice(this.startSize,this.endSize);
         } 
+    }
+
+// View Selector
+    viewValue=true;
+    get listViewRadioOptions(){
+        return [
+            { label: 'List View', value: 'true' },
+            { label: 'Table View', value: 'false' },
+            ]
+    }
+    handleViewChange(){
+        this.viewValue=!this.viewValue;
     }
 
 }

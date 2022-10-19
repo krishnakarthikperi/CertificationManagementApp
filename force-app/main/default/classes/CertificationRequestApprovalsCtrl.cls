@@ -10,9 +10,10 @@ public with sharing class CertificationRequestApprovalsCtrl {
 
     @AuraEnabled
 //    public static List<CertificationRequestApproval> getPendingApprovals(){
-    public static List<List<object>> getPendingApprovals(){
+    public static List<List<object>> getPendingApprovals(String key){
         try {
-            Map<Id,Certification_Request__c> cerReqMap =new Map<Id,Certification_Request__c>([SELECT Id,Name,Status__c,Comments__c,Due_Date__c,Email__c,Employee__c,Certification__r.Id,Certification__r.Name,Employee__r.Name,Employee__r.Employee_Name__c FROM Certification_Request__c]);
+            String searchKey = '%'+key+'%';
+            Map<Id,Certification_Request__c> cerReqMap =new Map<Id,Certification_Request__c>([SELECT Id,Name,Status__c,Comments__c,Due_Date__c,Email__c,Employee__c,Certification__r.Id,Certification__r.Name,Employee__r.Name,Employee__r.Employee_Name__c FROM Certification_Request__c WHERE Certification__r.Name LIKE :searchKey OR Employee__r.Employee_Name__c LIKE :searchKey OR Employee__r.Name LIKE :searchKey OR Name LIKE :searchKey]);
             List<ProcessInstanceWorkitem> workItems = [SELECT Id, ProcessInstanceId,ProcessInstance.TargetObjectId FROM ProcessInstanceWorkitem WHERE ProcessInstance.TargetObjectId IN :cerReqMap.keySet()];
             List<List<Object>> craList = new List<List<Object>>();
             for(ProcessInstanceWorkitem workItem: workItems){

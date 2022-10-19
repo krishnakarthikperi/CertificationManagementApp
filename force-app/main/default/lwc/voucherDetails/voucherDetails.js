@@ -3,6 +3,8 @@ import getVoucherList from '@salesforce/apex/VoucherLWCCtrl.getVoucherList';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 import VOUCHER_OBJECT from '@salesforce/schema/Voucher__c';
+import IMAGES from '@salesforce/resourceUrl/CMAImages';
+import getProfileName from '@salesforce/apex/GetCurrentProfileDetails.getProfileName';
 
 const cols=[
     {label:'Voucher ID',fieldName:'Name',type:'clickableVoucherId',typeAttributes:{recordId:{fieldName:'Id'},recordObject:{fieldName:'vouObject'}}},
@@ -21,6 +23,7 @@ export default class VoucherDetails extends NavigationMixin(LightningElement) {
     columns=cols;
     searchKey='';
 
+    vouIcon = IMAGES + '/voucherCropped.png';
 // Get the Vouchers List using APEX Class
     getTheVoucherList(){
         this.spinnerOn=true;
@@ -136,4 +139,46 @@ export default class VoucherDetails extends NavigationMixin(LightningElement) {
         this.vouList = this.fullVouList.slice(this.startSize,this.endSize);
         } 
     }
+
+// View Selector
+    viewValue=false;
+    get listViewRadioOptions(){
+        return [
+            { label: 'List View', value: 'false' },
+            { label: 'Table View', value: 'true' },
+            ]
+    }
+    handleViewChange(){
+        this.viewValue=!this.viewValue;
+    }
+
+// Modular View
+    handleVoucherView(event){
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: event.target.value,
+                actionName: 'view',
+            },
+        });
+    }
+
+// Voucher button not available for App User
+    renderedCallback(){
+        getProfileName()
+        .then(data=>{
+            this.profileName = data;
+            console.log(data);
+            if(this.profileName!='CMA App User'){
+                console.log(this.profileName)
+                console.log('inside if');
+                console.log(this.template.querySelectorAll('lightning-button')[0].label);
+                this.template.querySelectorAll('lightning-button')[0].disabled=false;
+            }
+        })
+        .catch(error=>{
+            console.log(error);
+        });
+    }
+
 }

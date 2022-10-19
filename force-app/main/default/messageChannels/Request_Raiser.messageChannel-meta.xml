@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>RequestRaiser</masterLabel>
+    <isExposed>true</isExposed>
+    <description>Message Channel for Request Rasier components</description>
+    <lightningMessageFields>
+        <fieldName>employeeData</fieldName>
+        <description>Contains the employee data</description>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>certificationData</fieldName>
+        <description>Contains the certification data</description>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <fieldName>certificationRequestData</fieldName>
+        <description>Contains the certification request data</description>
+    </lightningMessageFields>
+</LightningMessageChannel>

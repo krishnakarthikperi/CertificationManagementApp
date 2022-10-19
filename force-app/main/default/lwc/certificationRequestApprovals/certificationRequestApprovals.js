@@ -45,7 +45,7 @@ export default class CertificationRequestApprovals extends LightningElement {
             });
             this.fullCerReqApprList = result;
             this.cerReqApprList = this.fullCerReqApprList.slice(this.startSize,this.endSize);
-            this.isPaginate = this.fullCerReqApprList.length >this.pageSize;
+            this.isPaginate = this.fullCerReqApprList.length >pageSize;
 //Turn off spinner loading
             this.spinnerOn=false;
         })

@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div style={style} onmouseover={handleMouseOver}>
+    <h1>{style}</h1>
     <template if:true={recordId}>
         <section aria-labelledby="panel-heading-id" class="slds-popover slds-popover_panel slds-nubbin_left-top" role="dialog">
             <button class="slds-button slds-button_icon slds-button_icon slds-button_icon-small slds-float_right slds-popover__close" title="Close dialog">
@@ -15,7 +16,7 @@
                     </span>
                     <div class="slds-media__body">
                         <h2 class="slds-text-heading_medium slds-hyphenate" id="panel-heading-id">
-                            <a href="#">{empObj.Employee_Name__c}</a>
+                            <a href={empObj.EmployeeUrl}>{empObj.Employee_Name__c}</a>
                         </h2>
                     </div>
                 </header>

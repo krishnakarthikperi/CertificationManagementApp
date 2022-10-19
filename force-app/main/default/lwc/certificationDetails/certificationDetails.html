@@ -5,23 +5,68 @@
                 <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
             </div>
         </template>
+        <div class="slds-p-around_x-small">
 <!-- Button to display New Certification Modal -->
-        <lightning-button variant="brand" label="New Certification" title="New Certification" onclick={showModalBox}></lightning-button>        
+            <lightning-button icon-name="utility:adduser" variant="brand"  label="New Certification" title="New Certification" onclick={showModalBox}></lightning-button>        
 <!-- Input for Search keyword  -->
-        <lightning-input placeholder = "Enter Certification Name" onkeyup={filterCertificationRecords}></lightning-input>
-        <lightning-datatable 
-            key-field="Id" 
-            data={certList} 
-            columns={columns}
-            hide-checkbox-column>
-        </lightning-datatable>
+            <lightning-input type="search" placeholder = "Enter Certification Name" onkeyup={filterCertificationRecords}></lightning-input>
         <br/>
-        <template if:true={isPaginate}>
-            <lightning-button-group>
-                <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
-                <lightning-button label="Next" onclick={handleNext}></lightning-button>
-            </lightning-button-group>
+<!-- Radio toggle for List/Table view -->
+        <lightning-radio-group name="radioGroup"
+                        label="Select View"
+                        options={listViewRadioOptions}
+                        value={viewValue}
+                        type="button"
+                        onchange={handleViewChange}>
+        </lightning-radio-group>
+        </div>
+    </lightning-card>
+    <br/>
+    <lightning-card>
+<!-- DataTable showing records -->
+    <div class="slds-p-around_x-small">        
+        <template if:true={viewValue}>
+            <lightning-datatable 
+                key-field="Id" 
+                data={certList} 
+                columns={columns}
+                hide-checkbox-column>
+            </lightning-datatable>
+            <br/>
+            <template if:true={isPaginate}>
+                <lightning-button-group>
+                    <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
+                    <lightning-button label="Next" onclick={handleNext}></lightning-button>
+                </lightning-button-group>
+            </template>
         </template>
+    </div>
+<!-- Modular view -->
+    <div class="slds-p-around_x-small">
+        <template if:false={viewValue}>
+            <lightning-layout multiple-rows="true" pull-to-boundary="small">
+                <template for:each={certList} for:item="item">
+                    <lightning-layout-item key={item.Id} size="3" class="slds-p-around_x-small">
+                        <lightning-card title={item.Name} class="cert-tile">
+                            <div class="slds-p-horizontal_small">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <img src={cerIcon} alt="Certification details" class="cert-silhouette"/>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <br>
+                                        <p class="slds-m-bottom_xx-small">ID: {item.Certification_ID__c}</p>
+                                        <button class="slds-button slds-button_brand" title="View Certification Details" onclick={handleCertificationView} value={item.Id}>Select</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning-card>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </template>
+    </div>
+
 <!-- Modal for New Certification Form -->
         <template if:true={isShowModal}>
             <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">                
@@ -55,6 +100,6 @@
             </section>
             <div class="slds-backdrop slds-backdrop_open"></div>
         </template>
-
     </lightning-card>
+
 </template>

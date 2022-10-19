@@ -5,23 +5,72 @@
                 <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
             </div>
         </template>
+        <div class="slds-p-around_x-small" onrefreshdata={getTheVoucherList}>
 <!-- Button to display New Employee Modal -->
         <lightning-button variant="brand" label="New Certification Request" title="New Certification Request" onclick={showModalBox}></lightning-button>        
 <!-- Input for Search keyword  -->
         <lightning-input placeholder = "Enter Employee Name/Certification Name" onkeyup={filterCertificationRequestRecords}></lightning-input>
-        <c-custom-data-table 
-            key-field="id" 
-            data={cerReqList} 
-            columns={columns}
-            hide-checkbox-column>
-        </c-custom-data-table>
-        <br/>
-        <template if:true={isPaginate}>
-            <lightning-button-group>
-                <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
-                <lightning-button label="Next" onclick={handleNext}></lightning-button>
-            </lightning-button-group>
+<!-- Radio toggle for List/Table view -->
+        <lightning-radio-group name="radioGroup"
+                        label="Select View"
+                        options={listViewRadioOptions}
+                        value={viewValue}
+                        type="button"
+                        onchange={handleViewChange}>
+        </lightning-radio-group>
+    </div>
+<!-- Datatable to show certification request records -->
+    <div class="slds-p-around_x-small">        
+        <template if:true={viewValue}>
+            <c-custom-data-table 
+                key-field="id" 
+                data={cerReqList} 
+                columns={columns}
+                hide-checkbox-column>
+            </c-custom-data-table>
+            <br/>
+            <template if:true={isPaginate}>
+                <lightning-button-group>
+                    <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
+                    <lightning-button label="Next" onclick={handleNext}></lightning-button>
+                </lightning-button-group>
+            </template>
         </template>
+    </div>
+
+<!-- Modular view of record -->
+    <div class="slds-p-around_x-small">
+        <template if:false={viewValue}>
+            <lightning-layout multiple-rows="true" pull-to-boundary="small">
+                <template for:each={cerReqList} for:item="item">
+                    <lightning-layout-item key={item.Id} size="4" class="slds-p-around_x-small">
+                        <lightning-card title={item.Name} class="cr-tile">
+                            <div class="slds-p-horizontal_small">
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <img src={cerReqIcon} width="100" alt="Certification Request details" class="cr-silhouette"/>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <p class="slds-m-bottom_xx-small">Employee: {item.Employee__r.Employee_Name__c}</p>
+                                        <p class="slds-m-bottom_xx-small">Certification: {item.Certification__r.Name}</p>
+                                        <p class="slds-m-bottom_xx-small">Status: {item.Status__c}</p>
+                                        <button class="slds-button slds-button_outline-brand" title="View Certification Request Details" onclick={handleCertificationRequestViewDetails} value={item.Id}>View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning-card>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+            <template if:true={isPaginate}>
+                <lightning-button-group>
+                    <lightning-button label="Previous" onclick={handlePrevious} disabled="true"></lightning-button>
+                    <lightning-button label="Next" onclick={handleNext}></lightning-button>
+                </lightning-button-group>
+            </template>
+        </template>
+    </div>
+
 <!-- Modal for New Employee Form -->
         <template if:true={isShowModal}>
             <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">                
@@ -57,7 +106,22 @@
                 </div>
             </section>
             <div class="slds-backdrop slds-backdrop_open"></div>
-        </template>
-       
+        </template>       
     </lightning-card>
+
+
+
+<!-- KANBAN MODE START -->
+    <!-- <div class="card_wrapper">
+        <template for:each={pickVals} for:item="item">
+            <div class = "stageContainer" key={item}>
+                <h1 class="column_heading">{item}</h1>
+                <c-drag-and-drop-list records={records} stage={item}></c-drag-and-drop-list>
+            </div>
+        </template>
+    </div> -->
+<!-- KANBAN MODE END -->
+
+
+
 </template>

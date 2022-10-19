@@ -1,0 +1,12 @@
+<template>
+    <lightning-card>
+            <c-chart type="doughnut" responsive="true">
+                <c-dataset labels={superLabel}>
+                    <c-data label="# of vouchers" detail={superDetail} backgroundcolor={superColor}></c-data>
+                </c-dataset>
+                <c-title text="Active Vouches"></c-title>
+                <c-legend position="left"></c-legend>
+                <c-arc-configuration bordercolor="rgba(7, 62, 146, 0.7)"></c-arc-configuration>
+            </c-chart>    
+    </lightning-card>
+</template>
